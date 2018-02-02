@@ -1,9 +1,8 @@
+
 # -*- coding:utf-8 -*-
 import urllib.request, urllib.parse
 from bs4 import BeautifulSoup
 import time
-import lxml
-
 def get_info(start=1,end=1):
     info = {}  #储存目标数据
     url = 'http://www.szse.cn/main/disclosure/jgxxgk/djggfbd/' #目标链接
@@ -22,7 +21,7 @@ def get_info(start=1,end=1):
         datas = soup.find_all('td', class_='cls-data-td')  #数据行
         num = int(len(datas) / len(titles))                #数据行数
         #将数据写入本地文件
-        with open('./test1.txt', 'a') as fs:
+        with open('test1.txt', 'a') as fs:
             for j in range(num):
                 for title, data in zip(titles, datas[12 * j:12 * (j + 1)]):
                     info[title.get_text()] = data.get_text()
