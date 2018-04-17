@@ -11,7 +11,7 @@ import os
 # 爬虫抓取网页函数
 def getHtml(url):
     html = urllib.request.urlopen(url).read()
-    html = html.decode('utf-8')
+    html = html.decode('gbk')
     return html
 
 
