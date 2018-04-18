@@ -8,6 +8,7 @@ def get_info(start=1,end=1):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36',
     }
+    # 很好的模拟Post数据的例子
     #爬取所选取页数区间数据，该网页跳转页码，网址不变
     # 通过分析，post的数据中'tab1PAGENUM'是用来控制页码的，通过改变该键的值，来实现页码跳转
     for i in range(start,end+1):
