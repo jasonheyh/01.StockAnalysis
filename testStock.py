@@ -1,8 +1,8 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import tushare as ts
 import requests
 import pandas as pd
+from bs4 import BeautifulSoup
 import sqlite3
 
 import sys

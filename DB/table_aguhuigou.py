@@ -9,23 +9,22 @@ cursor = conn.cursor()
 
 
 
-sql = '''create table ggzc (
-        日期 DATE ,
-        市场代码 VARCHAR(10),
-        名称 VARCHAR(10),
-        名称缩写 VARCHAR(8),
-        变动金额 LONG ,
-        成交均价 FLOAT ,
-        变动比例 FLOAT,
-        变动人 VARCHAR(10),
-        董监高人员姓名 TEXT,
-        持股种类 VARCHAR(10),
-        变动股数 LONG ,
-        变动后持股数 LONG ,
-        变动人与董监高的关系 VARCHAR(20),
-        变动原因 TEXT,
-        职务 VARCHAR(20),
-        代码 VARCHAR(10))'''
+sql = '''create table aghg (
+        证券代码 VARCHAR(10),
+        证券名称 VARCHAR(10),
+        公告日期 DATE,
+        回购进度 VARCHAR(20),
+        币种 VARCHAR(10),
+        股份类型 VARCHAR(2),
+        数量 FLOAT ,
+        金额 FLOAT ,
+        比例 FLOAT ,
+        价格上限 FLOAT ,
+        价格下限 FLOAT ,
+        用途 TEXT,
+        最新价 FLOAT ,
+        PE FLOAT ,
+        是否破净 VARCHAR(5))'''
 
 # create table stock_%s" % fileName[0:6] + "(日期 date, 股票代码 VARCHAR(10),     名称 VARCHAR(10),\
 #                        收盘价 float,    最高价    float, 最低价 float, 开盘价 float, 前收盘 float, 涨跌额    float, \

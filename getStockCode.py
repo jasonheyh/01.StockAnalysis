@@ -1,9 +1,8 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import tushare as ts
+import lxml;
 import requests
 import pandas as pd
-import futuquant
 import sqlite3
 import sys
 csvPd = pd.read_csv('./stock.csv')
