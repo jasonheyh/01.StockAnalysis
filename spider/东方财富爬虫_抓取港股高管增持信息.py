@@ -9,14 +9,14 @@ CONST_TABLE_NAME = 'hkzc'
 CONST_STOCK_CODE = '股票代码'
 CONST_DATE = '公布日期'
 
-conn= sqlite3.connect("../DB/stock.db")
+conn= sqlite3.connect("../db/stock.db")
 cursor = conn.execute("SELECT max(" + CONST_DATE + ") from " + CONST_TABLE_NAME)
 max_date = ""
 for row in cursor:
     max_date = row[0]
 if(not max_date):
     max_date = "2017-01-10"
-# maxDateInTable = "2017-01-10"
+# max_date = "2017-01-10"
 print("max_date in table:" + max_date)
 
 url = 'http://hk.eastmoney.com/hold_%page%.html?code=&sdate=&edate='
@@ -35,10 +35,16 @@ def get_table_texts(p_url, page):
     for row in table.findAll("ul"):
         cells = row.findAll("li")
         if (len(cells) > 0):
-            texts = map(lambda x: x.find(text=True).strip(), cells)
+            texts = map(strip, cells)
             texts = list(texts)[1:]
             retText = retText + ",".join(texts) + "\n"
     return retText;
+
+def strip(x):
+    if(x.find(text=True)):
+        return x.find(text=True).strip()
+    else:
+        return "";
 
 def converNum(mount):
     if ('万' in mount):
@@ -46,7 +52,7 @@ def converNum(mount):
     else:
         return mount
 
-for i in range(200, 10000):
+for i in range(1, 10000):
     fs = open('hkzc.csv', 'w')
     fs.write("股票代码,股票名称,机构名称,变动方向,变动股份数,变动后数量,变动后持股率,公布日期\n")
     fs.write(get_table_texts(url, i))

@@ -4,7 +4,7 @@ import requests
 import json
 import pandas as pd
 import csv, sqlite3
-conn= sqlite3.connect("../DB/stock.db")
+conn= sqlite3.connect("../db/stock.db")
 
 cursor = conn.execute("SELECT max(日期) from ggzc")
 maxDateInTable = ""

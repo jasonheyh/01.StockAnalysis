@@ -5,7 +5,7 @@ import sqlite3
 
 from bs4 import BeautifulSoup
 
-conn= sqlite3.connect("../DB/stock.db")
+conn= sqlite3.connect("../db/stock.db")
 
 cursor = conn.execute("SELECT max(公告日期) from aghg")
 maxDateInTable = ""
