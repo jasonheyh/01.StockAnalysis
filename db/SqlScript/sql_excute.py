@@ -5,7 +5,7 @@ import sqlite3
 conn = sqlite3.connect('../stock.db')
 # print "Opened database successfully";
 
-cursor = conn.execute("DELETE FROM hkhg;")
+cursor = conn.execute("DELETE FROM hkzc;")
 cursor = conn.execute("COMMIT;")
 # for row in cursor:
 #    print "ID = ", row[0]
