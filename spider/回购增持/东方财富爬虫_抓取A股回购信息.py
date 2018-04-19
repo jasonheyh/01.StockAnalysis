@@ -5,7 +5,9 @@ import sqlite3
 
 from bs4 import BeautifulSoup
 
-conn= sqlite3.connect("../db/stock.db")
+conn= sqlite3.connect("../../db/stock.db")
+
+print("#####东方财富爬虫_抓取A股回购信息 开始#####")
 
 cursor = conn.execute("SELECT max(公告日期) from aghg")
 maxDateInTable = ""
@@ -21,8 +23,8 @@ url = 'http://ds.emoney.cn/DataCenter2/DataCenter/gphg_0?SortName=&SortFlag=&hid
 def getTableTexts(p_url):
     """
     获取URL中的Table的文字数据
-    :param p_url: 
-    :return: 
+    :param p_url:
+    :return:
     """
     retText = ""
     page = requests.get(url=p_url + str(i))
@@ -36,12 +38,12 @@ def getTableTexts(p_url):
     return retText;
 
 for i in range(1, 10000):
-    fs = open('huigou.csv', 'w')
+    fs = open('aghg.csv', 'w')
     fs.write("证券代码,证券名称,公告日期,回购进度,币种,股份类型,数量,金额,比例,价格上限,价格下限,用途,最新价,PE,是否破净\n")
     fs.write(getTableTexts(url))
     fs.close()
 
-    pdRetData = pd.read_table("huigou.csv", sep=',')
+    pdRetData = pd.read_table("aghg.csv", sep=',')
     pdRetData = pdRetData.replace("--", 0)
     pdRetData['证券代码'] = pdRetData['证券代码'].apply(lambda x: str(x).zfill(6))
     minDate = pdRetData['公告日期'].min()
@@ -54,4 +56,6 @@ for i in range(1, 10000):
         pdRetData.to_sql('aghg', conn, if_exists='append', index=False)
 
 conn.close()
+
+print("#####东方财富爬虫_抓取A股回购信息 结束#####")
 

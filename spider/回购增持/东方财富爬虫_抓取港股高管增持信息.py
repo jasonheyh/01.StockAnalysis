@@ -9,7 +9,9 @@ CONST_TABLE_NAME = 'hkzc'
 CONST_STOCK_CODE = '股票代码'
 CONST_DATE = '公布日期'
 
-conn= sqlite3.connect("../db/stock.db")
+print("#####东方财富爬虫_抓取港股高管增持信息 开始#####")
+
+conn= sqlite3.connect("../../db/stock.db")
 cursor = conn.execute("SELECT max(" + CONST_DATE + ") from " + CONST_TABLE_NAME)
 max_date = ""
 for row in cursor:
@@ -17,8 +19,6 @@ for row in cursor:
 if(not max_date):
     max_date = "2017-01-10"
 # max_date = "2017-01-10"
-print("max_date in table:" + max_date)
-
 url = 'http://hk.eastmoney.com/hold_%page%.html?code=&sdate=&edate='
 
 def get_table_texts(p_url, page):
@@ -65,11 +65,12 @@ for i in range(1, 10000):
     minDate = pd_ret_data[CONST_DATE].min()
     print(minDate)
     if (minDate <= max_date):
-        paRetData = pd_ret_data[pd_ret_data[CONST_DATE] > max_date]
-        paRetData.to_sql(CONST_TABLE_NAME, conn, if_exists='append', index=False)
+        pd_ret_data = pd_ret_data[pd_ret_data[CONST_DATE] > max_date]
+        pd_ret_data.to_sql(CONST_TABLE_NAME, conn, if_exists='append', index=False)
         break
     else:
         pd_ret_data.to_sql(CONST_TABLE_NAME, conn, if_exists='append', index=False)
 
 conn.close()
 
+print("#####东方财富爬虫_抓取港股高管增持信息 结束#####")

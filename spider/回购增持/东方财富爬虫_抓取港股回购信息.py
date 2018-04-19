@@ -9,7 +9,9 @@ CONST_TABLE_NAME = 'hkhg'
 CONST_STOCK_CODE = '股票代码'
 CONST_DATE = '日期'
 
-conn= sqlite3.connect("../db/stock.db")
+print("#####东方财富爬虫_抓取港股回购信息 开始#####")
+
+conn= sqlite3.connect("../../db/stock.db")
 cursor = conn.execute("SELECT max(" + CONST_DATE + ") from " + CONST_TABLE_NAME)
 max_date = ""
 for row in cursor:
@@ -66,3 +68,4 @@ for i in range(1, 10000):
 
 conn.close()
 
+print("#####东方财富爬虫_抓取港股回购信息 结束#####")

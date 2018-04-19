@@ -10,14 +10,15 @@ cursor = conn.cursor()
 
 
 sql = '''create table hkhg (
+        日期 DATE,
         股票代码 VARCHAR(10),
         股票名称 VARCHAR(10),
+        回购总额 NUMERIC,
         回购数量 NUMERIC,
         最高回购价 FLOAT,
         最低回购价 FLOAT,
-        回购平均价 FLOAT,
-        回购总额 NUMERIC,
-        日期 DATE)'''
+        回购平均价 FLOAT
+        )'''
 
 # create table stock_%s" % fileName[0:6] + "(日期 date, 股票代码 VARCHAR(10),     名称 VARCHAR(10),\
 #                        收盘价 float,    最高价    float, 最低价 float, 开盘价 float, 前收盘 float, 涨跌额    float, \
