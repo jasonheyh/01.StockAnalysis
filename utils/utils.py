@@ -3,6 +3,8 @@
 import sys
 import json
 import traceback
+import requests
+from bs4 import BeautifulSoup
 from datetime import datetime
 from .constant import *
 
@@ -32,4 +34,32 @@ def unique_and_normalize_list(lst):
     [ret.append(x) for x in tmp if x not in ret]
     return ret
 
+def conver_num(mount):
+    '''
+    带汉字万的数字转换成Number
+    :param mount:
+    :return:
+    '''
+    if ('万' in mount):
+        return float(mount.replace('万', "")) * 10000
+    else:
+        return mount
+
+
+def get_table_texts(p_url):
+    """
+    获取URL中的Table的文字数据
+    :param p_url:
+    :return:
+    """
+    retText = ""
+    page = requests.get(url=p_url + str(i))
+    soup = BeautifulSoup(page.text, "html.parser")
+    table = soup.find("table", {})
+    for row in table.findAll("tr"):
+        cells = row.findAll("td")
+        if (len(cells) > 0):
+            texts = map(lambda x: x.find(text=True).strip(), cells)
+            retText = retText + ",".join(list(texts)) + "\n"
+    return retText;
 

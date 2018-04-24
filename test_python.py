@@ -13,9 +13,9 @@ import selenium
 driver = webdriver.Chrome()
 driver.implicitly_wait(10)
 driver.get("https://localhost:6008")
-driver.find_element_by_id('username').send_keys('admin')
-driver.find_element_by_id('password').send_keys('zuikaku22195068')
-driver.find_element_by_class_name('btn-danger').click()
+# driver.find_element_by_id('username').send_keys('admin')
+# driver.find_element_by_id('password').send_keys('zuikaku22195068')
+# driver.find_element_by_class_name('btn-danger').click()
 # driver.implicitly_wait(5)
 # driver.find_element_by_link_text(u"Query管理").click()
 #
