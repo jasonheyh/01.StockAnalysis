@@ -28,6 +28,7 @@ for i in range(1, 10000):
     paRetData = pd.read_table("agzc.csv",sep=',')
     # print(paRetData)
     # paRetData.to_sql('huigou', conn, if_exists='append', index=False)
+    paRetData['代码'] = paRetData['代码'].apply(lambda x: str(x).zfill(6))
     minDate = paRetData['日期'].min()
     print(minDate)
     if (minDate <= maxDateInTable):

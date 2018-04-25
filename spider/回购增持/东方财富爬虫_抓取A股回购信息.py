@@ -45,7 +45,6 @@ for i in range(1, 10000):
 
     pdRetData = pd.read_table("aghg.csv", sep=',')
     pdRetData = pdRetData.replace("--", 0)
-    pdRetData['证券代码'] = pdRetData['证券代码'].apply(lambda x: str(x).zfill(6))
     minDate = pdRetData['公告日期'].min()
     print(minDate)
     if (minDate <= maxDateInTable):
