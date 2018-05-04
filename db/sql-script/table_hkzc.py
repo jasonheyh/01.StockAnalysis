@@ -10,7 +10,7 @@ cursor = conn.cursor()
 
 
 sql = '''create table hkzc (
-        公布日期 DATE,
+        日期 DATE,
         股票代码 VARCHAR(10),
         股票名称 VARCHAR(10),
         机构名称 VARCHAR(20),

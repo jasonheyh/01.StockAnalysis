@@ -57,6 +57,9 @@ for i in range(1, 10000):
     pd_ret_data[CONST_STOCK_CODE] = pd_ret_data[CONST_STOCK_CODE].apply(lambda x: str(x).zfill(5))
     pd_ret_data['回购数量'] = pd_ret_data['回购数量'].apply(converNum)
     pd_ret_data['回购总额'] = pd_ret_data['回购总额'].apply(converNum)
+    pd_ret_data['回购总额'] = pd_ret_data['回购总额'].apply(lambda x : round(x,2))
+    pd_ret_data['最低回购价'] = pd_ret_data['最低回购价'].apply(lambda x: round(x,2))
+    pd_ret_data['回购平均价'] = pd_ret_data['回购平均价'].apply(lambda x: round(x,2))
     minDate = pd_ret_data[CONST_DATE].min()
     print(minDate)
     if (minDate <= max_date):

@@ -23,12 +23,13 @@ for i in range(1, 10000):
     retData = r.text.replace("\"])", "").replace("([\"","").replace("\",\"","\n")
     # print(retData)
     with open('agzc.csv', 'w') as fs:
-        fs.write("变动比例,变动人,代码,董监高人员姓名,持股种类,日期,变动股数,变动后持股数,成交均价,名称,变动人与董监高的关系,名称缩写,变动原因,变动金额,职务,市场代码\n")
+        fs.write("变动比例,变动人,代码,董监高人员姓名,持股种类,日期,变动股数,变动后持股数,成交均价,股票名称,变动人与董监高的关系,名称缩写,变动原因,变动金额,职务,股票代码\n")
         fs.writelines(retData)
     paRetData = pd.read_table("agzc.csv",sep=',')
     # print(paRetData)
-    # paRetData.to_sql('huigou', conn, if_exists='append', index=False)
+    # paRetData.to_sql('huigou', conn, if_exists='append', index=False)x
     paRetData['代码'] = paRetData['代码'].apply(lambda x: str(x).zfill(6))
+    paRetData['变动比例'] = paRetData['变动比例'].apply(lambda x: round(x,2))
     minDate = paRetData['日期'].min()
     print(minDate)
     if (minDate <= maxDateInTable):

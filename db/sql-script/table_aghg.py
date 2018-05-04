@@ -10,9 +10,9 @@ cursor = conn.cursor()
 
 
 sql = '''create table aghg (
-        公告日期 DATE,
-        证券代码 VARCHAR(10),
-        证券名称 VARCHAR(10),
+        日期 DATE,
+        股票代码 VARCHAR(10),
+        股票名称 VARCHAR(10),
         回购进度 VARCHAR(20),
         数量 FLOAT ,
         金额 FLOAT ,

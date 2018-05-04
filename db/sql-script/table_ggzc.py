@@ -11,8 +11,8 @@ cursor = conn.cursor()
 
 sql = '''create table agzc (
         日期 DATE ,
-        市场代码 VARCHAR(10),
-        名称 VARCHAR(10),
+        股票代码 VARCHAR(10),
+        股票名称 VARCHAR(10),
         名称缩写 VARCHAR(8),
         变动金额 NUMERIC ,
         成交均价 FLOAT ,

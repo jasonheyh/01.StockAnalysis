@@ -9,7 +9,7 @@ conn= sqlite3.connect("../../db/stock.db")
 
 print("#####东方财富爬虫_抓取A股回购信息 开始#####")
 
-cursor = conn.execute("SELECT max(公告日期) from aghg")
+cursor = conn.execute("SELECT max(日期) from aghg")
 maxDateInTable = ""
 for row in cursor:
     maxDateInTable = row[0]
@@ -39,16 +39,17 @@ def getTableTexts(p_url):
 
 for i in range(1, 10000):
     fs = open('aghg.csv', 'w')
-    fs.write("证券代码,证券名称,公告日期,回购进度,币种,股份类型,数量,金额,比例,价格上限,价格下限,用途,最新价,PE,是否破净\n")
+    fs.write("股票代码,股票名称,日期,回购进度,币种,股份类型,数量,金额,比例,价格上限,价格下限,用途,最新价,PE,是否破净\n")
     fs.write(getTableTexts(url))
     fs.close()
 
     pdRetData = pd.read_table("aghg.csv", sep=',')
     pdRetData = pdRetData.replace("--", 0)
-    minDate = pdRetData['公告日期'].min()
+    minDate = pdRetData['日期'].min()
+    pdRetData['股票代码'] = pdRetData['股票代码'].apply(lambda x: str(x).zfill(6))
     print(minDate)
     if (minDate <= maxDateInTable):
-        paRetData = pdRetData[pdRetData['公告日期'] > maxDateInTable]
+        paRetData = pdRetData[pdRetData['日期'] > maxDateInTable]
         paRetData.to_sql('aghg', conn, if_exists='append', index=False)
         break
     else:

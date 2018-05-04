@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 CONST_TABLE_NAME = 'hkzc'
 CONST_STOCK_CODE = '股票代码'
-CONST_DATE = '公布日期'
+CONST_DATE = '日期'
 
 print("#####东方财富爬虫_抓取港股高管增持信息 开始#####")
 
@@ -54,7 +54,7 @@ def converNum(mount):
 
 for i in range(1, 10000):
     fs = open('hkzc.csv', 'w')
-    fs.write("股票代码,股票名称,机构名称,变动方向,变动股份数,变动后数量,变动后持股率,公布日期\n")
+    fs.write("股票代码,股票名称,机构名称,变动方向,变动股份数,变动后数量,变动后持股率,日期\n")
     fs.write(get_table_texts(url, i))
     fs.close()
 
@@ -62,6 +62,7 @@ for i in range(1, 10000):
     pd_ret_data[CONST_STOCK_CODE] = pd_ret_data[CONST_STOCK_CODE].apply(lambda x: str(x).zfill(5))
     pd_ret_data['变动股份数'] = pd_ret_data['变动股份数'].apply(converNum)
     pd_ret_data['变动后数量'] = pd_ret_data['变动后数量'].apply(converNum)
+    pd_ret_data['变动后数量'] = pd_ret_data['变动后数量'].apply(lambda x: round(x,0))
     minDate = pd_ret_data[CONST_DATE].min()
     print(minDate)
     if (minDate <= max_date):
