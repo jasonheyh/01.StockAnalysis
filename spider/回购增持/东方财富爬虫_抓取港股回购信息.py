@@ -18,7 +18,7 @@ for row in cursor:
     max_date = row[0]
 if(not max_date):
     max_date = "2017-01-10"
-# maxDateInTable = "2017-01-10"
+max_date = "2015-01-10"
 
 url = 'http://hk.eastmoney.com/buyback_%page%.html?code=&sdate=&edate='
 
@@ -47,7 +47,7 @@ def converNum(mount):
     else:
         return mount
 
-for i in range(1, 10000):
+for i in range(68, 10000):
     fs = open('hkhg.csv', 'w')
     fs.write("股票代码,股票名称,回购数量,最高回购价,最低回购价,回购平均价,回购总额,日期\n")
     fs.write(get_table_texts(url, i))

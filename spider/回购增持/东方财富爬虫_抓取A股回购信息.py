@@ -14,11 +14,11 @@ maxDateInTable = ""
 for row in cursor:
     maxDateInTable = row[0]
 if(not maxDateInTable):
-    maxDateInTable = "2017-01-10"
-# maxDateInTable = "2017-01-10"
+    maxDateInTable = "2016-12-30"
+maxDateInTable = "2015-01-01"
 
 url = 'http://ds.emoney.cn/DataCenter2/DataCenter/gphg_0?SortName=&SortFlag=&hidBlockName=&' \
-      'hidStartDate=2017-01-01&hidEndDate=2018-04-18&hidStock=&BuybackProgress=&index=' #目标链接
+      'hidStartDate=2015-05-10&hidEndDate=2016-12-30&hidStock=&BuybackProgress=&index=' #目标链接
 
 def getTableTexts(p_url):
     """
@@ -37,7 +37,7 @@ def getTableTexts(p_url):
             retText = retText + ",".join(list(texts)) + "\n"
     return retText;
 
-for i in range(1, 10000):
+for i in range(1, 41):
     fs = open('aghg.csv', 'w')
     fs.write("股票代码,股票名称,日期,回购进度,币种,股份类型,数量,金额,比例,价格上限,价格下限,用途,最新价,PE,是否破净\n")
     fs.write(getTableTexts(url))
