@@ -4,6 +4,8 @@ import requests
 import json
 import pandas as pd
 import csv, sqlite3
+import time
+
 conn= sqlite3.connect("../../db/stock.db")
 
 print("#####东方财富爬虫_抓取A股高管增持信息 开始#####")
@@ -14,7 +16,7 @@ for row in cursor:
     maxDateInTable = row[0]
 if(not maxDateInTable):
     maxDateInTable = "2017-01-01"
-# maxDateInTable = "2017-01-01"
+# maxDateInTable = "2005-04-01"
 
 #分级A的数据接口
 for i in range(1, 10000):
@@ -30,14 +32,18 @@ for i in range(1, 10000):
     # paRetData.to_sql('huigou', conn, if_exists='append', index=False)x
     paRetData['代码'] = paRetData['代码'].apply(lambda x: str(x).zfill(6))
     paRetData['变动比例'] = paRetData['变动比例'].apply(lambda x: round(x,2))
+    paRetData = paRetData[(paRetData['日期'] != "") & paRetData['日期']]
     minDate = paRetData['日期'].min()
     print(minDate)
-    if (minDate <= maxDateInTable):
-        paRetData = paRetData[paRetData['日期'] > maxDateInTable]
+    if (str(minDate) <= maxDateInTable):
+        paRetData = paRetData[(paRetData['日期'] > maxDateInTable)]
         paRetData.to_sql('agzc', conn, if_exists='append', index=False)
         break
     else:
+        pass
         paRetData.to_sql('agzc', conn, if_exists='append', index=False)
+
+    time.sleep(3)
 
 conn.close()
 
