@@ -15,7 +15,7 @@ CONST_COLUMN_DATE = '日期'
 
 conn = sqlite3.connect("../../db/stock.db")
 
-def ag_hgtj_company():
+def ag_hgtj_company(p_base_data):
     '''
     A股的高管增持统计（根据公司）
     :return:
@@ -23,7 +23,7 @@ def ag_hgtj_company():
     CONST_TABLE_NAME = 'agzc'
     CONST_STOCK_NAME = "股票名称"
     CONST_SUM_COLUMN = '变动金额'
-    CONST_BASE_DATE = '2018-04-15'
+    p_base_data = p_base_data
 
     series = [{
         'type': 'column',
@@ -36,7 +36,11 @@ def ag_hgtj_company():
         },
         "dataLabels": {
             "enabled": True,
-            "format": '{point.y}百万'
+            "rotation": -90,
+            "color": '#FFFFFF',
+            "align": 'right',
+            "format": '{point.y:.1f}',
+            "y": -30
         }
     }]
 
@@ -57,7 +61,14 @@ def ag_hgtj_company():
         'title': {'text': '回购统计_公司'},
         'subtitle': {'text': ''},
         "xAxis": {
-            "type": 'category'
+            "type": 'category',
+            "crosshair": True
+        },
+        "yAxis": {
+            # "min": 0,
+            "title": {
+                "text": '金额 (百万)'
+            }
         }
     }
     totalHgMoney = []
@@ -66,7 +77,7 @@ def ag_hgtj_company():
     series[0]['data'] = totalHgMoney
     IPython.core.display.publish_display_data({'text/html': charts.plot(series, options=options, show='inline').data})
 
-def ag_hgtj_hangye():
+def ag_hgtj_hangye(p_base_data):
     '''
     A股的高管增持统计（根据行业）
     :return:
@@ -74,7 +85,7 @@ def ag_hgtj_hangye():
     CONST_TABLE_NAME = 'agzc'
     CONST_STOCK_NAME = "股票名称"
     CONST_SUM_COLUMN = '变动金额'
-    CONST_BASE_DATE = '2018-04-15'
+    CONST_BASE_DATE = p_base_data
 
     series = [{
         'type': 'column',
@@ -87,30 +98,37 @@ def ag_hgtj_hangye():
         },
         "dataLabels": {
             "enabled": True,
-            "format": '{point.y}百万'
+            "rotation": -90,
+            "color": '#FFFFFF',
+            "align": 'right',
+            "format": '{point.y:.1f}',
+            "y": -30
         }
     }]
 
     pdData = pd.read_sql("SELECT * from " + CONST_TABLE_NAME + " where 日期 > '" + CONST_BASE_DATE + "' ", conn)
     sumPdData = pdData.groupby(CONST_STOCK_NAME).sum()
-    # sumPdData = sumPdData.sort_values(by=CONST_SUM_COLUMN, ascending=False).head(30)
     sumPdData = sumPdData.sort_values(by=CONST_SUM_COLUMN, ascending=False)
     sumPdData[CONST_SUM_COLUMN] = sumPdData[CONST_SUM_COLUMN].apply(lambda x: round(x / 1000000, 2))
     df1 = ts.get_stock_basics()
-    # list1 = sumPdData.index.tolist()
-    # pd2 = df1[df1['name'].isin(list1)].sort_values(by='pe', ascending=False)
     sumPdData = sumPdData.reset_index()
     sumPdData = pd.merge(sumPdData, df1, how='inner', left_on=[CONST_STOCK_NAME], right_on=['name'])
-    IPython.core.display.publish_display_data({'text/html': (sumPdData[['name', 'pe', 'industry', 'timeToMarket', CONST_SUM_COLUMN]]).to_html()})
+#     IPython.core.display.publish_display_data({'text/html': (sumPdData[['name', 'pe', 'industry', 'timeToMarket', CONST_SUM_COLUMN]]).to_html()})
     sumPdData = sumPdData.groupby('industry').sum()
     sumPdData = sumPdData.sort_values(by=CONST_SUM_COLUMN, ascending=True)
     sumPdData[CONST_SUM_COLUMN] = sumPdData[CONST_SUM_COLUMN].apply(lambda x: round(x, 1))
-#     sumPdData = sumPdData.set_index(CONST_STOCK_NAME)
     options = {
         'title': {'text': '回购统计_行业'},
         'subtitle': {'text': ''},
         "xAxis": {
-            "type": 'category'
+            "type": 'category',
+            "crosshair": True
+        },
+        "yAxis": {
+            "min": 0,
+            # "title": {
+                "text": '金额 (百万)'
+            }
         }
     }
     totalHgMoney = []
@@ -120,14 +138,14 @@ def ag_hgtj_hangye():
     IPython.core.display.publish_display_data({'text/html': charts.plot(series, options=options, show='inline').data})
 
 
-def ag_hgtj_month():
+def ag_hgtj_month(p_base_data):
     '''
     A股的高管增持统计（根据月份）
     :return:
     '''
     CONST_TABLE_NAME = 'agzc'
     CONST_SUM_COLUMN = '变动金额'
-    CONST_BASE_DATE = '2018-01-01'
+    CONST_BASE_DATE = p_base_data
 
     series = [{
         'type': 'column',
@@ -140,7 +158,11 @@ def ag_hgtj_month():
         },
         "dataLabels": {
             "enabled": True,
-            "format": '{point.y}亿'
+            "rotation": -90,
+            "color": '#FFFFFF',
+            "align": 'right',
+            "format": '{point.y:.1f}',
+            "y": -30
         }
     }]
 
@@ -152,8 +174,15 @@ def ag_hgtj_month():
         'title': {'text': '回购统计_月份'},
         'subtitle': {'text': ''},
         "xAxis": {
-            "type": 'category'
-        }
+            "type": 'category',
+            "crosshair": True
+        },
+        "yAxis": {
+            # "min": 0,
+            "title": {
+                "text": '金额 (亿)'
+            }
+        },
     }
     totalHgMoney = []
     for key, value in sumPdData[CONST_SUM_COLUMN].to_dict().items():
@@ -163,6 +192,6 @@ def ag_hgtj_month():
     IPython.core.display.publish_display_data({'text/html': charts.plot(series, options=options, show='inline').data})
 
 
-# ag_hgtj_company()
-# ag_hgtj_month()
-ag_hgtj_hangye()
+ag_hgtj_company('2018-04-01')
+ag_hgtj_month('2015-07-01')
+ag_hgtj_hangye('2018-04-01')
