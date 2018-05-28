@@ -6,7 +6,9 @@ import traceback
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from .constant import *
+import stock_utils.const as sconst
+import pandas as pd
+from pyquery import PyQuery as pq
 
 def normalize_date_format(date_str):
     """normalize the format of data"""
@@ -62,4 +64,52 @@ def get_table_texts(p_url):
             texts = map(lambda x: x.find(text=True).strip(), cells)
             retText = retText + ",".join(list(texts)) + "\n"
     return retText;
+
+
+def get_stock_info_tencent(stock_list):
+    '''
+    取得股票基本信息（A股，港股）
+    :param stock_list: 股票列表，A股和港股不能一起
+    :return:
+    '''
+    _market = ""
+    _stock_list = []
+    for for_stock in stock_list:
+        if (len(for_stock) == 5):
+            _market = "HK"
+            for_stock = "hk" + for_stock
+        elif (for_stock[0:2] == "60"):
+            for_stock = "sh" + for_stock
+            _market = "A"
+        elif (for_stock[0:2] == "00"):
+            for_stock = "sz" + for_stock
+            _market = "A"
+
+
+        _stock_list.append(for_stock)
+    url = "http://qt.gtimg.cn/q=" + ",".join(_stock_list)
+    stock_info_list = requests.get(url).text.split(";")
+
+    stock_info_dict = {}
+    for for_stock in stock_info_list:
+        if(for_stock and len(for_stock) > 1):
+            _stock_info_str = for_stock.split("=")
+            _stock_name = _stock_info_str[0].strip("\n")[4:]
+            _stock_info_list = _stock_info_str[1].strip("\"").split("~")
+            stock_info_dict.update({_stock_name : _stock_info_list})
+
+    retPd=pd.DataFrame.from_dict(stock_info_dict, orient='index')
+    if (_market == "A"):
+        retPd.columns = sconst.TENCENT_STOCK_COLUMN
+    else :
+        retPd.columns = sconst.TENCENT_STOCK_COLUMN_HK
+
+    for for_column in retPd.columns:
+        if ("不明" in for_column):
+            del retPd[for_column];
+
+    return retPd;
+
+# if __name__ == '__main__':
+#     get_stock_info_tencent(['01918','00337'], "HK")
 
