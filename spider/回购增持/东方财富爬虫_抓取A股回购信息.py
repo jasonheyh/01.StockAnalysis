@@ -27,7 +27,9 @@ def getTableTexts(p_url):
     :return:
     """
     retText = ""
+    # while page.response:
     page = requests.get(url=p_url + str(i))
+    # while page.status_code != 200:
     soup = BeautifulSoup(page.text, "html.parser")
     table = soup.find("table", {})
     for row in table.findAll("tr"):
@@ -48,9 +50,9 @@ for i in range(1, 1000):
     minDate = pdRetData['日期'].min()
     pdRetData['股票代码'] = pdRetData['股票代码'].apply(lambda x: str(x).zfill(6))
     print(minDate)
-    if (minDate <= maxDateInTable):
-        paRetData = pdRetData[pdRetData['日期'] > maxDateInTable]
-        paRetData.to_sql('aghg', conn, if_exists='append', index=False)
+    if (str(minDate) != 'nan' and minDate <= maxDateInTable):
+        pdRetData = pdRetData[pdRetData['日期'] > maxDateInTable]
+        pdRetData.to_sql('aghg', conn, if_exists='append', index=False)
         break
     else:
         pdRetData.to_sql('aghg', conn, if_exists='append', index=False)
